@@ -25,7 +25,9 @@ module.exports = {
     static: {
       directory: path.join(__dirname, 'src'),
     },
+    open: true,
+    compress: true,
+    hot: true,
   },
   mode: 'development', 
-  watch: true
 }

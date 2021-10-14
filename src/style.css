@@ -1,13 +1,36 @@
+@font-face {
+    font-family: 'Roboto';
+    src: url(./assets/fonts/Roboto/Roboto-Regular.ttf);
+    font-style: normal;
+    font-weight: normal;
+}
+@font-face {
+    font-family: 'Roboto';
+    src: url(./assets/fonts/Roboto/Roboto-Bold.ttf);
+    font-style: normal;
+    font-weight: bold;
+}
+@font-face {
+    font-family: 'Roboto';
+    src: url(./assets/fonts/Roboto/Roboto-Italic.ttf);
+    font-style: italic;
+    font-weight: normal;
+}
+
 * {
     padding: 0;
     margin: 0;
     box-sizing: border-box;
 }
 body {
+    position: relative;
     background-color: #16222D;
-    color: #fff;
+    color: #D3DAE1;
+    font-size: 16px;
+    font-family: 'Roboto', sans-serif;
 }
 
+/*Общие стили*/
 .panel {
     background-color: #1f2e3c;
     border: 3px solid #6F8DA9;
@@ -15,24 +38,21 @@ body {
     box-shadow: inset 5px 5px 5px rgba(0, 0, 0, 0.5), inset -5px -5px 5px rgba(0, 0, 0, 0.5);
 }
 .sidebar_header {
-    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
     text-align: center;
     background-color: rgba(110, 178, 236, 0.2);
     box-shadow: 0px 5px 5px rgba(0, 0, 0, 0.2);
     padding: 15px 10px;
 }
-.left-sidebar .sidebar_hide-button {
-    position: absolute;
-    top: 35%;
-    left: 90%;
-    cursor: pointer;
-/*     font-size: 1.2em;
-    font-weight: bold; */
+.sidebar_title {
+    margin-left: 25px;
 }
 .sidebar_hide-button svg {
     width: 20px;
     height: 20px;
-    fill: #fff;
+    fill: #D3DAE1;
 }
 .tools-button {
     display: flex;
@@ -42,22 +62,237 @@ body {
     width: 120px;
     height: 80%;
     margin-left: 20px;
+    border: none;
     border-radius: 10px;
-    background-color: rgba(255, 255, 255, 0.2)
+    color: #D3DAE1;
+    background-color: rgba(255, 255, 255, 0.2);
+    cursor: pointer;
+    transition: background-color 0.2s;
+}
+.tools-button:hover {
+    background-color: rgba(15, 107, 160, 0.5)
 }
 .tools-button svg {
     width: 30px;
     height: 30px;
-    fill: #fff;
+    fill: #D3DAE1;
+}
+.input {
+    margin: 0 auto;
+    padding: 10px;
+    border: 1px solid #4d88ff;
+    border-radius: 10px;
+    color: #D3DAE1;
+    font-size: 16px;
+    outline: none;
+    background-color: rgba(0, 0, 0, 0.2);
+}
+.btn {
+    padding: 5px;
+    color: #D3DAE1;
+    cursor: pointer;
+    transition: background-color 0.3s;
+}
+.cancel-btn {
+    border: 1px solid #E12C2C;
+    background-color: rgba(225, 44, 44, 0.4);
+}
+.cancel-btn:hover {
+    background-color: #E12C2C;
+}
+.confirm-btn {
+    border: 1px solid #1AB334;
+    background-color: rgba(26, 179, 52, 0.4);
+}
+.confirm-btn:hover {
+    background-color: #1AB334;
+}
+.modal {
+    display: flex;
+    align-items: center;
+    position: absolute;
+    top: 0;
+    width: 100%;
+    height: 100vh;
+    background-color: rgba(0, 0, 0, 0.5)
+}
+.modal_content {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-around;
+    position: relative;
+    width: 400px;
+    height: 200px;
+    margin: 0 auto;
+    background-color: rgba(110, 178, 236, 0.2);
+    border-radius: 10px;
+}
+.modal_header {
+    display: flex;
+    justify-content: space-between;
+    padding: 0 15px 10px;
+    border-bottom: 1px solid rgba(110, 178, 236, 0.4);
+    text-align: center;
+}
+.modal_close {
+    padding: 10px;
+    cursor: pointer;
+}
+.modal_close svg {
+    width: 15px;
+    height: 15px;
+    fill: #D3DAE1;
 }
 
+.modal_input {
+    width: 80%;
+}
+.modal_btn {
+    width: 100px;
+    height: 40px;
+    margin: 0 auto;
+    border: 1px solid #5A2383;
+    color: #D3DAE1;
+    background-color: rgba(85, 26, 129, 0.2);
+    cursor: pointer;
+    transition: background-color 0.3s;
+}
+.modal_btn:hover {
+    background-color: rgba(85, 26, 129, 0.6);
+}
+
+/*Шапка*/
 .header-tools {
     display: flex;
     align-items: center;
     height: 15vh;
     width: 100vw;
 }
+
+/*Левая боковая панель*/
+.left-sidebar .sidebar_hide-button {
+    cursor: pointer;
+    transition: transform 0.5s;
+}
 .left-sidebar {
     width: 15%;
     height: 85vh;
+    border-top: none;
+    transition: width 0.5s;
+}
+.board-list {
+    padding: 15px;
+    text-align: right;
+}
+.board-list_item {
+    padding: 10px;
+    list-style: none;
+    font-size: 16px;
+    cursor: pointer;
+    border-radius: 10px;
+    transition: background-color 0.3s;
+}
+.board-list_item:first-of-type {
+    margin-top: 0;
+}
+.board-list_item:hover {
+    background-color: rgba(90, 35, 131, 0.3)
+}
+.board-list_item.active {
+    background-color: rgba(90, 35, 131, 0.3)
+}
+
+/*Центральный блок*/
+.central-block {
+    display: flex;
+}
+.main-board {
+    display: flex;
+    padding: 15px;
+}
+.column { 
+    width: 250px;
+    height: 60px;
+    margin-right: 30px;
+    padding: 5px 10px;
+    background-color: rgba(110, 178, 236, 0.2);
+    border-radius: 20px;
+    font-weight: bold;
+}
+.column.activated {
+    height: 80px;
+}
+.column.created {
+    height: 100%;
+    /* background-color: rgba(10, 109, 27, 0.5); */
+    background-color: rgba(110, 178, 236, 0.2);
+}
+.column-create_btn {
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+    width: 100%;
+    height: 100%;
+    cursor: pointer;
+}
+.column-name_input {
+    width: 100%;
+    height: 20px;
+}
+.column_btn-block {
+    display: flex;
+    justify-content: space-around;
+    margin-top: 10px;
+}
+.column_header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    position: relative;
+    min-height: 40px;
+    border-bottom: 1px solid #16222D;
+/*     border-radius: 20px;
+    background-color: #0B831F; */
+}
+.column_options-btn {
+    padding: 10px;
+    cursor: pointer;
+}
+.column_options-list {
+    position: absolute;
+    top: 70%;
+    right: -40%;
+    border: 1px solid #16222D;
+    border-radius: 5px;
+    background-color: #477093;
+    font-size: 0.8em;
+    list-style: none;
+}
+.column_option-element {
+    padding: 10px;
+    cursor: pointer;
+    border-bottom: 1px solid #16222D;
+    transition: background-color 0.3s;
+}
+.column_option-element:hover {
+    background-color: #375875;
+}
+.column_option-element:last-of-type {
+    border-bottom: none;
+}
+/*Интерактивные стили*/
+.hide {
+    display: none;
+}
+.mirrored {
+    transform: scaleX(-1);
+}
+.left-sidebar.hide {
+    display: block;
+    overflow: hidden;
+    width: 50px;
+}
+.flex-column {
+    display: flex;
+    flex-direction: column;
 }
