@@ -244,15 +244,23 @@ body {
     justify-content: space-around;
     margin-top: 10px;
 }
+
 .column_header {
     display: flex;
+    flex-direction: column;
     align-items: center;
-    justify-content: space-between;
+    justify-content: center;
     position: relative;
     min-height: 40px;
-    border-bottom: 1px solid #16222D;
+    
 /*     border-radius: 20px;
     background-color: #0B831F; */
+}
+.column.created .column_header {
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-between;
+    border-bottom: 1px solid #16222D;
 }
 .column_options-btn {
     padding: 10px;

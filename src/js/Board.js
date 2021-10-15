@@ -23,5 +23,9 @@ function openBoard(id) {
 function addColumn(column) {
     console.log(column);
 }
+function renameColumn(id, title) {
+    console.log('id:' + id);
+    console.log('title:' + title);
+}
 
-export {createBoard, openBoard, addColumn};
+export {createBoard, openBoard, addColumn, renameColumn};
