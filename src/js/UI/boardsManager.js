@@ -1,8 +1,8 @@
-import column from './column';
+import {setHolderDragnDrop, setItemDragnDrop} from './dragnDropEvents';
 
 const boardsManager = () => {
     const mainBoardEl = document.querySelector('.main-board');
-    const columnHolders = document.querySelectorAll('.column-holder');
+    //const columnHolders = document.querySelectorAll('.column-holder');
     const columnElementInner = `
         <header class="header flex-column">
             <div class="create_btn">
@@ -56,11 +56,25 @@ const boardsManager = () => {
 
     function createColumn() {
         let col = document.createElement('div');
-        col.innerHTML = columnElementInner;
-        col.classList.add('column');
-        col.setAttribute('data-state', 'non-initialized');
+        let holder = document.createElement('div'); 
 
-        for(let i = 0; i < columnHolders.length; i++) {
+        col.innerHTML = columnElementInner;
+
+        col.classList.add('column');
+        holder.classList.add('column-holder');
+
+        col.setAttribute('data-state', 'non-initialized');
+        col.setAttribute('draggable', 'true');
+
+        holder.append(col);
+        mainBoardEl.append(holder);
+
+        setEventListeners(col);
+        setHolderDragnDrop(holder, '.column-holder', '.column');
+        setItemDragnDrop(col);
+        /* setDragnDropListeners(col);
+        setHolderEvents(holder); */
+        /* for(let i = 0; i < columnHolders.length; i++) {
             if(!columnHolders[i].querySelector('.column')) {
                 columnHolders[i].append(col);
                 columns.push(col);
@@ -68,7 +82,7 @@ const boardsManager = () => {
                 setEventListeners(col);
                 return;
             }
-        }
+        } */
     }
     function createCard(column) {
         let card = document.createElement('div');
@@ -76,12 +90,11 @@ const boardsManager = () => {
         let color = cardColors[colorInd];
         let columnMain = column.querySelector('.main');
 
-        console.log(columnMain);
-        console.log(column);
         card.innerHTML = cardElementInner;
         card.classList.add('card');
         card.classList.add(color);
         card.setAttribute('data-state', 'non-initialized');
+        card.setAttribute('draggable', 'true');
 
         columnMain.append(card);
         cards.push(card);
@@ -110,6 +123,48 @@ const boardsManager = () => {
         renameBtn.addEventListener('click', () => showTitleBlock(element, elementFinishedBlock, elementNamingBlock, elementOptionsList));
         deleteBtn.addEventListener('click', () => deleteColumn(element));
     }
+    function setHolderEvents(holder) {
+        holder.addEventListener('dragover', (e) => {
+            e.preventDefault();
+        });
+        holder.addEventListener('dragenter', (e) => {
+            holder.classList.add('over');
+        });
+        holder.addEventListener('dragleave', (e) => {
+            if(e.target.classList.contains('column-holder')) {
+                e.target.classList.remove('over');
+            }
+        });
+
+        holder.addEventListener('drop',(e) => {
+            let curElement;
+
+            curElement = holder.querySelector('.column');
+            choosedItem.parentNode.append(curElement);
+            holder.append(choosedItem);
+            holder.classList.remove('over');
+        });
+    }
+    function setDragnDropListeners(element) {
+        element.addEventListener('dragstart', (e) => {
+            choosedItem = element;
+            e.target.classList.add('hold');
+            
+            setTimeout(() => {
+                e.target.classList.add('hide');
+            }, 0);
+            
+        });
+        element.addEventListener('dragend', (e) => {
+            e.target.classList.remove('hide');
+            choosedItem = null;
+        });
+        
+        /* if(element.classList.contains('column')) {
+
+        } */
+    }
+
     function showTitleBlock(element, oldBlock, namingBlock, optionsList, isCreate) {
         oldBlock.classList.add('hide');
         optionsList.classList.add('hide');
@@ -193,6 +248,25 @@ const boardsManager = () => {
 
     }
     function deleteColumn(element) { 
+        //let placeholders; /* = Array.prototype.slice.call(columnHolders); */
+        //let placeholderInd;
+        let placeholder;
+
+        if(element.classList.contains('column')) {
+            /* placeholders = Array.prototype.slice.call(columnHolders);
+            placeholderInd = placeholders.indexOf(element.parentNode); */
+            placeholder = element.parentNode;
+            placeholder.remove();
+
+            /* for(let i = ++placeholderInd; i < placeholders.length; i++) {
+                let column = placeholders[i].querySelector('.column');
+
+                if(column) {
+                    placeholders[i - 1].append(column);
+                }
+            } */
+        }
+
         element.remove();
     }
 
