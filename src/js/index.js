@@ -7,7 +7,6 @@ import {addNewBoard} from './UI/boardList';
 import toolsPanel from './UI/toolsPanel';
 import modals from './UI/modals';
 import panel from './UI/panel';
-import column from './UI/column';
 import boardsManager from './UI/boardsManager';
 
 document.addEventListener('DOMContentLoaded', () => {

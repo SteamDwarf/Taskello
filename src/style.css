@@ -246,6 +246,13 @@ body {
     height: 100%;
     cursor: pointer;
 }
+.create_card {
+    height: 50px;
+    border: 2px solid #16222D;
+    border-radius: 5px;
+    color: #4DC21E;
+    background-color: #1f2e3c;
+}
 .column .name_input {
     width: 100%;
     height: 20px;
@@ -260,6 +267,7 @@ body {
     justify-content: center;
     position: relative;
     min-height: 40px;
+    padding: 10px 0;
 }
 .column .naming-block {
     padding-bottom: 10px;
@@ -299,15 +307,16 @@ body {
 .column .option-element:last-of-type {
     border-bottom: none;
 }
-.column .main {
-    height: 100%;
+.column.created .main {
+    min-height: 20px;
 }
 
 .card {
-    margin-top: 15px;
-    border-radius: 20px;
     max-height: 200px;
+    margin: 10px 0;
+    border-radius: 20px;
     cursor: grab;
+    transition: top 0.5s;
 }
 .card.create {
     display: flex;
@@ -375,13 +384,13 @@ body {
     background-color: rgba(255, 255, 255, 0.2);
 }
 .hold {
-    opacity: 1 !important;
+    opacity: 0.5;
 }
 .mirrored {
     transform: scaleX(-1);
 }
 .left-sidebar.hide {
-    display: block;
+    display: block !important;
     overflow: hidden;
     width: 50px;
 }
