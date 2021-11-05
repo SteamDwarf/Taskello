@@ -3,6 +3,7 @@ const panel = (panelSelector, hidePanelBtnSelector, additionalSelectors) => {
     const panelElem = document.querySelector(panelSelector);
     const hidePanelBtn = document.querySelector(hidePanelBtnSelector);
     const panelTitle = panelElem.querySelector('.panel_title');
+    const panelMain = panelElem.querySelector('.sidebar_main');
     const additionalElements = [];
 
     if(additionalSelectors) {
@@ -14,6 +15,7 @@ const panel = (panelSelector, hidePanelBtnSelector, additionalSelectors) => {
     hidePanelBtn.addEventListener('click', () => {
         panelElem.classList.toggle('hide');
         hidePanelBtn.classList.toggle('mirrored');
+        panelMain.classList.toggle('hide');
         if(panelTitle) {
             panelTitle.classList.toggle('hide');
         }

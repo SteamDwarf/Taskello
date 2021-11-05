@@ -11,6 +11,12 @@ import boardsManager from './UI/boardsManager';
 
 document.addEventListener('DOMContentLoaded', () => {
     const boardNameInput = document.querySelector('#board-name_input');
+    const createBoardBtn = document.querySelector('[data-create="board"]');
+    const modalCreateBoard = document.querySelector('[data-modal="create-board"]');
+
+    createBoardBtn.addEventListener('click', () => {
+        modalCreateBoard.classList.remove('hide');
+    });
 
     function setNewBoard() {
         let board = createBoard(boardNameInput.value);
