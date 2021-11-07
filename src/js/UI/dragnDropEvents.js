@@ -30,7 +30,13 @@ function dragEnd(e) {
 function dragOver(e, holder, dragItemSelector) {
     e.preventDefault();
 
-    let afterElement = getDragAfterElement(holder, dragItemSelector, e.clientY);
+    let afterElement;
+
+    if(!choosedItem) {
+        return;
+    }
+
+    afterElement = getDragAfterElement(holder, dragItemSelector, e.clientY);
 
     if(!afterElement) {
         holder.append(choosedItem);
@@ -52,9 +58,6 @@ function drop(e, holder, dragItemClass) {
         holder.append(choosedItem);
         holder.classList.remove('over');
     } */
-
-
-    
 }
 
 function getDragAfterElement(holder, dragItemClass, y) {

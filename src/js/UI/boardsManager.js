@@ -1,10 +1,19 @@
 import {setHolderDragnDrop, setItemDragnDrop} from './dragnDropEvents';
-import { compose, curry } from '../utils';
+import { compose, curry, trace, querySelector } from '../utils';
+
 
 const boardsManager = () => {
-    const mainBoardEl = document.querySelector('.main-board');
+    //const mainBoardEl = document.querySelector('.main-board');
     const centralBlock = document.querySelector('.central-block');
-    //const columnHolders = document.querySelectorAll('.column-holder');
+
+
+    const boardInner = `
+        <main class="board_main holder"> </main>
+        <div class="create_btn" data-create="column">
+            <h4 class="title">Создать колонку</h4>
+            <span>+</span>
+        </div>
+    `;
     const columnElementInner = `
         <header class="header flex-column">           
             <div class="naming-block">
@@ -69,25 +78,52 @@ const boardsManager = () => {
 
         return element;
     });
+    //TODO Поменять местами parent и btnHandler и если нет parent, то его получить из btnHandler
+    /**
+     @description Функция привязывает к кнопке создание определенно элемента
+     @param func - функция, создающая определенный элемент
+     @param parent - элемент родитель, в который добавится созданный элемент
+     @param btnHandler - элемент в котором находится кнопка создания
+    */
+    const createBtnSetEvent = curry((func, parent, btnHandler) => {
+        const createBtn = btnHandler.querySelector('.create_btn');
 
-    const createColumn = compose(setEventListeners, setHolderDragnDrop('.card'), createElement(columnElementInner, 'column'));
-    const createCard = compose(setEventListeners, setItemDragnDrop, setElementColor(cardColors), createElement(cardElementInner, 'card'));
+        if(parent == null) {
+            createBtn.addEventListener('click', () => func(querySelector('.holder', btnHandler)));
+        } else {
+            createBtn.addEventListener('click', () => func(parent));
+        }
+    });
 
+    const createColumn = compose(
+        setElementEditables, 
+        setHolderDragnDrop('.card'), 
+        createElement(columnElementInner, 'column')
+    );
+    const createCard = compose(
+        setElementEditables, 
+        setItemDragnDrop, 
+        setElementColor(cardColors), 
+        createElement(cardElementInner, 'card')
+    );
 
-    let columns = [];
-    let cards = [];
-    let choosedItem;
+    //TODO Надо в createBtnSetEvent как то передать parent, т.к до создания board его нет
+    const createBoard = compose(
+        createBtnSetEvent(createColumn, null),
+        //getElementAndParent('.main-board'),
+        trace('after create element'),
+        createElement(boardInner, 'board')
+    );
 
-    function createBtnSetEvent(element, func, parent) {
-        const createBtn = element.querySelector('.create_btn');
+    let currentBoard;
 
-        createBtn.addEventListener('click', () => func(parent));
-    }
+    createBoard(centralBlock);
     
-
-    
-
-    
+    /* function createBoard(parent) {
+        const element = createElement(boardInner, 'board')(parent);
+        const newElementParent = element.querySelector('.main-board');
+        createBtnSetEvent(createColumn, newElementParent, element);
+    } */
 
 /*     function createColumn() {
         let col = document.createElement('div');
@@ -107,7 +143,7 @@ const boardsManager = () => {
         //mainBoardEl.append(holder);
         mainBoardEl.append(col);
 
-        setEventListeners(col);
+        setElementEditables(col);
         setHolderDragnDrop(columnMain, '.card');
         //setHolderDragnDrop(holder, '.column');
         //setItemDragnDrop(col);
@@ -127,12 +163,12 @@ const boardsManager = () => {
         columnMain.append(card);
         cards.push(card);
 
-        setEventListeners(card);
+        setElementEditables(card);
         
         setItemDragnDrop(card);
     } */
 
-    function setEventListeners(element) {
+    function setElementEditables(element) {
         const elementNamingBlock = element.querySelector('.naming-block');
         const elementOptionsList = element.querySelector('.options-list');
         const cancelBtn = element.querySelector('.cancel-btn');
@@ -143,22 +179,13 @@ const boardsManager = () => {
         const renameBtn = element.querySelector('[data-action="rename"]');
         const deleteBtn = element.querySelector('[data-action="delete"]');
 
-        /* if(element.classList.contains('column')) {
-            columnCreateBtn = element.querySelector('[data-create="column"]');
-            cardCreateBtn = element.querySelector('[data-create="card"]');
-
-            columnCreateBtn.addEventListener('click', () => showTitleBlock(element, columnCreateBtn, elementNamingBlock, elementOptionsList, true));
-            cardCreateBtn.addEventListener('click', () => createCard(element));
-        }  */
-
-        
         cancelBtn.addEventListener('click', () => cancelNaming(element));
         confirmBtn.addEventListener('click', () => setElementName(element, elementNameInput, elementFinishedBlock, elementNamingBlock));
         elementOptionsBtn.addEventListener('click', () => {
             elementOptionsList.classList.toggle('hide');
         });
         renameBtn.addEventListener('click', () => showTitleBlock(element, elementFinishedBlock, elementNamingBlock, elementOptionsList));
-        deleteBtn.addEventListener('click', () => deleteColumn(element));
+        deleteBtn.addEventListener('click', () => deleteElement(element));
     }
 
     function showTitleBlock(element, oldBlock, namingBlock, optionsList, isCreate) {
@@ -173,12 +200,9 @@ const boardsManager = () => {
     function cancelNaming(element) {
         let namingBlock = element.querySelector('.naming-block');
         let finishedBlock = element.querySelector('.finished-block');
-        let elementCreateBtn = element.querySelector('.create_btn');
 
         if(element.getAttribute('data-state') === 'non-initialized') {
-            element.remove();
-            //elementCreateBtn.classList.remove('hide');
-            //element.classList.remove('created');
+            deleteElement(element);
         } else if(element.getAttribute('data-state') === 'initialized') {
             finishedBlock.classList.remove('hide');
         }
@@ -200,7 +224,7 @@ const boardsManager = () => {
 
             if(element.classList.contains('column')) {
                 element.querySelector('[data-create="card"]').classList.remove('hide');
-                createBtnSetEvent(element, createCard, element.querySelector('.main'));
+                createBtnSetEvent(createCard, element.querySelector('.main'), element);
                 //createColumn();
                 //createCard(element);
             } else if(element.classList.contains('card')) {
@@ -209,20 +233,11 @@ const boardsManager = () => {
         } 
 
     }
-    function deleteColumn(element) { 
-        let placeholder;
-
-        if(element.classList.contains('column')) {
-            placeholder = element.parentNode;
-            placeholder.remove();
-        }
-
+    function deleteElement(element) { 
         element.remove();
     }
 
-    createBtnSetEvent(centralBlock, createColumn, mainBoardEl);
-    //createColumn();
-    //createElement(columnElementInner, 'column', mainBoardEl);
+    
 };
 
 export default boardsManager;
