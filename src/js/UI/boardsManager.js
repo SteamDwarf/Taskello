@@ -1,10 +1,15 @@
 import {setHolderDragnDrop, setItemDragnDrop} from './dragnDropEvents';
-import { compose, curry, trace, querySelector } from '../utils';
+import { compose, curry, trace, querySelector, dataIdSet } from '../utils';
+import { addNewBoard } from './boardList';
+import { setFile } from '../Board';
+import modals from './modals';
 
 
 const boardsManager = () => {
     //const mainBoardEl = document.querySelector('.main-board');
     const centralBlock = document.querySelector('.central-block');
+    const boardHolder = document.querySelector('.board-holder');
+    const currentBoardTitle = document.querySelector('.board-name');
 
 
     const boardInner = `
@@ -78,7 +83,7 @@ const boardsManager = () => {
 
         return element;
     });
-    //TODO Поменять местами parent и btnHandler и если нет parent, то его получить из btnHandler
+
     /**
      @description Функция привязывает к кнопке создание определенно элемента
      @param func - функция, создающая определенный элемент
@@ -93,6 +98,29 @@ const boardsManager = () => {
         } else {
             createBtn.addEventListener('click', () => func(parent));
         }
+
+    });
+
+    const openBoard = curry((boards, boardID) => {
+        boardHolder.innerHTML = '';
+        boards.forEach(board => {
+            if(board.id == boardID) {
+                currentBoard = board.boardEl;
+                currentBoardTitle.textContent = board.title;
+            }
+        });
+        boardHolder.append(currentBoard);
+    });
+    const unsetCurrentBoard = curry((currentBoard) => {
+        let parent;
+
+        if(!currentBoard) {
+            return centralBlock;
+        }
+
+        parent  = currentBoard.parentNode;
+        currentBoard.remove();
+        return parent;
     });
 
     const createColumn = compose(
@@ -107,66 +135,47 @@ const boardsManager = () => {
         createElement(cardElementInner, 'card')
     );
 
-    //TODO Надо в createBtnSetEvent как то передать parent, т.к до создания board его нет
-    const createBoard = compose(
+/*     const createBoard = compose(
+
         createBtnSetEvent(createColumn, null),
-        //getElementAndParent('.main-board'),
-        trace('after create element'),
-        createElement(boardInner, 'board')
-    );
+        setBoard,
+        dataIdSet(Date.now()),
+        createElement(boardInner, 'board'),
+        unsetCurrentBoard
+    ); */
 
     let currentBoard;
+    let boards = [];
 
-    createBoard(centralBlock);
-    
-    /* function createBoard(parent) {
-        const element = createElement(boardInner, 'board')(parent);
-        const newElementParent = element.querySelector('.main-board');
-        createBtnSetEvent(createColumn, newElementParent, element);
-    } */
-
-/*     function createColumn() {
-        let col = document.createElement('div');
-        //let holder = document.createElement('div'); 
-        let columnMain;
-
-        col.innerHTML = columnElementInner;
-        columnMain = col.querySelector('.main');
-
-        col.classList.add('column');
-        //holder.classList.add('column-holder');
-
-        col.setAttribute('data-state', 'non-initialized');
-        //col.setAttribute('draggable', 'true');
-
-        //holder.append(col);
-        //mainBoardEl.append(holder);
-        mainBoardEl.append(col);
-
-        setElementEditables(col);
-        setHolderDragnDrop(columnMain, '.card');
-        //setHolderDragnDrop(holder, '.column');
-        //setItemDragnDrop(col);
-    } */
-    /* function createCard(column) {
-        let card = document.createElement('div');
-        let colorInd = Math.floor(Math.random() * cardColors.length);
-        let color = cardColors[colorInd];
-        let columnMain = column.querySelector('.main');
-
-        card.innerHTML = cardElementInner;
-        card.classList.add('card');
-        card.classList.add(color);
-        card.setAttribute('data-state', 'non-initialized');
-        //card.setAttribute('draggable', 'true');
-
-        columnMain.append(card);
-        cards.push(card);
-
-        setElementEditables(card);
+    function createBoard(modal) {
+        let title = modal.querySelector('input').value;
+        let parent = boardHolder;
+        let board;
+        let boardObj = {};
         
-        setItemDragnDrop(card);
-    } */
+
+        currentBoardTitle.textContent = title;
+        boardHolder.innerHTML = '';
+
+        
+        board =  createElement(boardInner, 'board', parent);
+        boardObj.boardEl = board;
+        boardObj.id = Date.now();
+        boardObj.title = title;
+        currentBoard = boardObj.boardEl;
+        boards.push(boardObj);
+
+        addNewBoard(boardObj.id, title, openBoard(boards));
+        createBtnSetEvent(createColumn, null, board);
+    }
+    
+
+
+
+    //createBoard(centralBlock);
+
+    modals('#create-board-btn', '.modal', '.modal_close', '#create-board_btn', createBoard);
+    
 
     function setElementEditables(element) {
         const elementNamingBlock = element.querySelector('.naming-block');
@@ -237,7 +246,8 @@ const boardsManager = () => {
         element.remove();
     }
 
-    
+
+
 };
 
 export default boardsManager;

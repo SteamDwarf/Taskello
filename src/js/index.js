@@ -2,7 +2,7 @@
 
 import '../style.css';
 
-import {createBoard} from './Board';
+//import {createBoard} from './Board';
 import {addNewBoard} from './UI/boardList';
 import toolsPanel from './UI/toolsPanel';
 import modals from './UI/modals';
@@ -24,7 +24,7 @@ document.addEventListener('DOMContentLoaded', () => {
         addNewBoard(board);
     }
 
-    modals('#create-board-btn', '.modal', '.modal_close', '#create-board_btn', setNewBoard);
+    /* modals('#create-board-btn', '.modal', '.modal_close', '#create-board_btn', setNewBoard); */
     panel('.left-sidebar', '.sidebar_hide-button', ['.board-list']);
     boardsManager();
     /* columns(); */

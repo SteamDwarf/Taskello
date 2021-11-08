@@ -1,29 +1,35 @@
 import { openBoard } from "../Board";
+import { dataIdSet, dataGet } from "../utils";
 
 const boardListElem = document.querySelector('.board-list');
 
+let openBoardFunc;
 let boards = [];
 
 function setEventListeners() {
     boards.forEach(board => {
         board.listItem.addEventListener('click', () => {
             setItemActive(board);
+            openBoardFunc(dataGet('id', board.listItem));
         });
     });
 }
 
-function addNewBoard(board) {
+function addNewBoard(boardID, boardName, openBoardF) {
     let boardEl = document.createElement('li');
     let boardObj = {};
 
-    boardEl.textContent = `${board.id}. ${board.name}`;
+    boardEl.textContent = boardName;
     boardEl.classList.add('board-list_item');
+    dataIdSet(boardID, boardEl);
 
-    boardObj.id = board.id;
-    boardObj.name = board.name;
+
+    boardObj.id = boardID;
+    boardObj.name = boardName;
     boardObj.listItem = boardEl;
     boards.push(boardObj);
 
+    openBoardFunc = openBoardF;
     boardListElem.append(boardEl);
     setItemActive(boardObj);
     setEventListeners();
@@ -33,7 +39,7 @@ function setItemActive(choosedBoard) {
         board.listItem.classList.remove('active');
     });
     choosedBoard.listItem.classList.add('active');
-    openBoard(choosedBoard.id);
+    //openBoard(choosedBoard.id);
 }
 
 export {addNewBoard, setItemActive};

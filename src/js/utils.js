@@ -14,6 +14,28 @@ const trace = curry((tag, x) => {
     console.log(tag, x);
     return x;
 });
+const querySelector = (selector, element) => {
+  return element.querySelector(selector);
+};
+const append = curry((parent, element) => {
+  parent.append(element);
+
+  return element;
+})
+const dataGet = (dataName, element) => {
+  return element.dataset[dataName];
+}
+const dataSet = curry((dataName, dataValue, element) => {
+  element.dataset[dataName] = dataValue;
+
+  return element;
+});
+const dataIdSet = dataSet('id');
+
+
+const getTail = (el) => {
+  return el[el.length - 1];
+}
 /* const memoize = (fn) => {
     let cache = {};
 
@@ -32,12 +54,10 @@ const trace = curry((tag, x) => {
       }
     }
 } */
-const querySelector = (selector, element) => {
-    return element.querySelector(selector);
-};
+
 /* const getElementAndParent = curry((selector, parent) => {
     const element = parent.querySelector(selector);
     return {element, parent}
 }); */
 
-export {compose, curry, trace, querySelector};
+export {compose, curry, trace, querySelector, dataIdSet, dataGet};

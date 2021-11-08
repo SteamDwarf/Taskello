@@ -74,8 +74,8 @@ const modals = (modalBtnSelector, modalElemSelector, modalCloseClass, submitBtnS
     modalElem.addEventListener('click', (e) => {
         modalClose(e);
     });
-    submitBtn.addEventListener('click', () => {
-        submitFunction();
+    submitBtn.addEventListener('click', (e) => {
+        submitFunction(e.target.parentNode);
         modalClose();
     });
 };
