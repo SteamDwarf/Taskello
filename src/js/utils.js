@@ -60,4 +60,4 @@ const getTail = (el) => {
     return {element, parent}
 }); */
 
-export {compose, curry, trace, querySelector, dataIdSet, dataGet};
+export {compose, curry, trace, querySelector, dataIdSet, dataSet, dataGet};

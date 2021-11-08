@@ -294,6 +294,9 @@ body {
     height: 95vh;
     background-color: rgba(110, 178, 236, 0.2);
 }
+.column_title {
+    text-align: center;
+}
 .create_btn {
     display: flex;
     justify-content: space-around;
@@ -347,7 +350,7 @@ body {
 }
 .column .options-list {
     position: absolute;
-    top: 70%;
+    top: 0%;
     right: -20%;
     border: 2px solid #16222D;
     border-radius: 5px;
@@ -376,7 +379,6 @@ body {
     scrollbar-width: 10px;
     scrollbar-base-color: #1f2e3c, transparent;
 }
-
 
 .column[data-state="initialized"] .main::-webkit-scrollbar {
     width: 10px;
@@ -437,13 +439,14 @@ body {
 }
 .card .options-list {
     position: absolute;
-    top: 70%;
-    right: -40%;
+    top: -10%;
+    right: 0%;
     border: 1px solid #16222D;
     border-radius: 5px;
     background-color: #315371;
     font-size: 0.8em;
     list-style: none;
+    z-index: 2;
 }
 .card .option-element {
     padding: 10px;

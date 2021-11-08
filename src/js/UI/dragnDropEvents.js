@@ -2,19 +2,22 @@ import {curry} from '../utils';
 
 let choosedItem;
 
-const setHolderDragnDrop = curry((dragItemSelector, holder) => {
-    holder.addEventListener('dragover', (e) => dragOver(e, holder.querySelector('.main'), dragItemSelector));
-    holder.addEventListener('drop', (e) => drop(e, holder, dragItemSelector));
+const setHolderDragnDrop = curry((props) => {
+    let {domEl, dragItemSelector} = props;
 
-    return holder;
+    domEl.addEventListener('dragover', (e) => dragOver(e, domEl.querySelector('.main'), dragItemSelector));
+    domEl.addEventListener('drop', (e) => drop(e, domEl, dragItemSelector));
+
+    return props;
 });
-function setItemDragnDrop(item) {
-    item.setAttribute('draggable', 'true');
+function setItemDragnDrop(props) {
+    let {domEl} = props;
 
-    item.addEventListener('dragstart', (e) => dragStart(e, item));
-    item.addEventListener('dragend', dragEnd);
+    domEl.setAttribute('draggable', 'true');
+    domEl.addEventListener('dragstart', (e) => dragStart(e, domEl));
+    domEl.addEventListener('dragend', dragEnd);
 
-    return item;
+    return props;
 }
 
 function dragStart(e, item) {

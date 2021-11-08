@@ -75,7 +75,7 @@ const modals = (modalBtnSelector, modalElemSelector, modalCloseClass, submitBtnS
         modalClose(e);
     });
     submitBtn.addEventListener('click', (e) => {
-        submitFunction(e.target.parentNode);
+        submitFunction({id: Date.now(), modal: e.target.parentNode});
         modalClose();
     });
 };
