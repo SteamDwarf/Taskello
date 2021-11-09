@@ -1,5 +1,16 @@
-const compose = (...fns) => (...args) => fns.reduceRight((res, fn) => [fn.call(null, ...res)], args)[0];
-const curry = (fn) => {
+/**
+ * @description Последовательно выполняет все переданные функции, начиная с последней. 
+ *              Последующая функция принимают значение, возвращаемое предыдущей функцией.
+ * @param fns - функции 
+ */
+ export const compose = (...fns) => (...args) => fns.reduceRight((res, fn) => [fn.call(null, ...res)], args)[0];
+
+/**
+ * @description 
+ * @param  fn - функция
+ * @returns 
+ */
+ export const curry = (fn) => {
     const arity = fn.length;
   
     return function $curry(...args) {
@@ -10,54 +21,53 @@ const curry = (fn) => {
       return fn.call(null, ...args);
     };
 };
-const trace = curry((tag, x) => {
+export const trace = curry((tag, x) => {
     console.log(tag, x);
     return x;
 });
-const querySelector = (selector, element) => {
+export const querySelector = (selector, element) => {
   return element.querySelector(selector);
 };
-const append = curry((parent, element) => {
+export const append = curry((parent, element) => {
   parent.append(element);
 
   return element;
 })
-const dataGet = (dataName, element) => {
+export const dataGet = (dataName, element) => {
   return element.dataset[dataName];
 }
-const dataSet = curry((dataName, dataValue, element) => {
+export const dataSet = curry((dataName, dataValue, element) => {
   element.dataset[dataName] = dataValue;
 
   return element;
 });
-const dataIdSet = dataSet('id');
+export const dataIdSet = dataSet('id');
 
+export const copyObject = curry((savingArray, srcObject) => {
+  let distObject = {};
+  Object.assign(distObject, srcObject);
 
-const getTail = (el) => {
+  if(savingArray) {
+      savingArray.push(distObject);
+  }
+
+  return srcObject;
+});
+
+export const getTail = (el) => {
   return el[el.length - 1];
 }
-/* const memoize = (fn) => {
-    let cache = {};
+export function hideElementsByBodyClick(target, elementClass, showElementBtnClass) {
+  let elements;
 
-    return (...args) => {
-      let n = args[0];
-
-      if (n in cache) {
-        console.log('Fetching from cache');
-        return cache[n];
+  if(target.classList.contains(showElementBtnClass)) {
+      return;
+  }
+  
+  elements = document.querySelectorAll(`.${elementClass}`);
+  elements.forEach(element => {
+      if(!element.classList.contains('hide')) {
+          element.classList.add('hide');
       }
-      else {
-        console.log('Calculating result');
-        let result = fn(n);
-        cache[n] = result;
-        return result;
-      }
-    }
-} */
-
-/* const getElementAndParent = curry((selector, parent) => {
-    const element = parent.querySelector(selector);
-    return {element, parent}
-}); */
-
-export {compose, curry, trace, querySelector, dataIdSet, dataSet, dataGet};
+  });
+}

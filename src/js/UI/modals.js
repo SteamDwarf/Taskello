@@ -1,9 +1,11 @@
+import { curry } from "../utils";
+
 /*Данный модуль добавляет функционал модальным окнам
   Принимает в качестве параметров:
   1.Селектор кнопки вызова модального окна
   2.Селектор самого модального окна
   3.Класс елемента закрытия модального окна*/
-const modals = (modalBtnSelector, modalElemSelector, modalCloseClass, submitBtnSelector, submitFunction) => {
+const modals = curry((modalBtnSelector, modalElemSelector, modalCloseClass, submitBtnSelector, submitFunction) => {
 
     const modalBtn = document.querySelectorAll(modalBtnSelector);
     const modalElem = document.querySelector(modalElemSelector);
@@ -74,10 +76,15 @@ const modals = (modalBtnSelector, modalElemSelector, modalCloseClass, submitBtnS
     modalElem.addEventListener('click', (e) => {
         modalClose(e);
     });
-    submitBtn.addEventListener('click', (e) => {
-        submitFunction({id: Date.now(), modal: e.target.parentNode});
+    modalElem.addEventListener('submit', (e) => {
+        e.preventDefault();
+        submitFunction({id: Date.now(), modal: modalElem});
         modalClose();
     });
-};
+    /* submitBtn.addEventListener('click', (e) => {
+        submitFunction({id: Date.now(), modal: e.target.parentNode});
+        modalClose();
+    }); */
+});
 
 export default modals;

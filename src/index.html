@@ -48,7 +48,7 @@
         <div class="board-holder"></div>
     </div>
     
-    <div class="modal hide" data-modal="create-board">
+    <form class="modal hide" data-modal="create-board">
         <div class="modal_content">
             <header class="modal_header">
                 <h3 class="modal_title">Создать новую доску</h3>
@@ -58,10 +58,10 @@
                     </svg>
                 </div>
             </header>
-            <input type="text" class="modal_input input" id="board-name_input">
-            <button class="modal_btn" id="create-board_btn">Создать</button>
+            <input type="text" class="modal_input input" id="board-name_input" data-type="title">
+            <button class="modal_btn" id="create-board_btn" type="submit">Создать</button>
         </div>
-    </div>
+    </form>
     <script src="./index.js"></script>
 </body>
 </html>
