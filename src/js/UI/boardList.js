@@ -34,7 +34,7 @@ function setEventListeners() {
     setItemActive(boardObj);
     setEventListeners();
 } */
-const addNewBoard = curry((openBoardF, props) => {
+const addBoardInBoardList = curry((openBoardF, props) => {
     let boardEl = document.createElement('li');
     let boardObj = {};
     let {title: boardName, id: boardID} = props;
@@ -64,4 +64,4 @@ function setItemActive(choosedBoard) {
     //openBoard(choosedBoard.id);
 }
 
-export {addNewBoard, setItemActive};
+export {addBoardInBoardList, setItemActive};

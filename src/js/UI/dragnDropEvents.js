@@ -63,8 +63,8 @@ function drop(e, holder, dragItemClass) {
     } */
 }
 
-function getDragAfterElement(holder, dragItemClass, y) {
-    const draggableItems = [...holder.querySelectorAll(`${dragItemClass}:not(.hold)`)];
+function getDragAfterElement(holder, dragItemSelector, y) {
+    const draggableItems = [...holder.querySelectorAll(`${dragItemSelector}:not(.hold)`)];
     let afterElement;
 
     afterElement =  draggableItems.reduce((prevItem, curItem) => {
