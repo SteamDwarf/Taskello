@@ -19,7 +19,8 @@
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "start": "webpack serve",
-    "serv": "webpack-dev-server --mode development --open"
+    "serv": "webpack-dev-server --mode development --open",
+    "dist": "npx webpack"
   },
   "author": "Shazhko Dmitriy",
   "license": "ISC"

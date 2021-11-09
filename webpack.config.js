@@ -11,6 +11,10 @@ module.exports = {
       { test: /\.(js)$/, 
         use: 'babel-loader' 
       },
+      {
+        test: /\.(woff(2)?|eot|ttf|otf|svg|)$/,
+        type: 'asset/inline'
+      }
     ]
   },
   output: {
